@@ -1,6 +1,10 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+/enimapod.iml
+/misc.xml
+/modules.xml
+/vcs.xml
 # Editor-based HTTP Client requests
 /httpRequests/
 # Datasource local storage ignored files
