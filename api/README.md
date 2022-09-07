@@ -7,8 +7,6 @@
 - Install Spring Version 2.7.3 and Spring Boot
   - OS X: `brew tap spring-io/tap`
   - OS X: `brew install spring-boot`
-- Install Java 18 and JDK
-  - https://www.oracle.com/java/technologies/downloads/
 
 ### Running the example
 - Maven uses pom.xml to build / run projects, so commands need to be executed from the directory containing this.
