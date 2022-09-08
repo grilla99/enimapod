@@ -4,9 +4,13 @@
 ### Prerequisites
 - Install Maven Version 3.8.6
     - OS X: `brew install maven`
+    - Other: Follow `https://maven.apache.org/install.html`
 - Install Spring Version 2.7.3 and Spring Boot
-    - OS X: `brew tap spring-io/tap`
-    - OS X: `brew install spring-boot`
+    - OS X: 
+      - `brew tap spring-io/tap`
+      - `brew install spring-boot`
+    - Other:
+      - Dependencies should be automatically downloaded by Maven when attempting to run the application
 
 ### Running the example
 - Maven uses pom.xml to build / run projects, so commands need to be executed from the directory containing this.
