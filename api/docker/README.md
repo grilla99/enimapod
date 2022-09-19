@@ -8,7 +8,7 @@
 - Run `sudo docker build -f docker/Dockerfile -t enimapod-api .`
 
 ### Run the container
-- Start the container, removing any existing container - `sudo docker rm -f enimapod-api; sudo docker run --name enimapod-api -p 8080:80 -d enimapod-api`
+- Start the container, removing any existing container - `sudo docker rm -f enimapod-api; sudo docker run --name enimapod-api -p 8081:8081 -d enimapod-api`
 
 ### Access the web server
 - Go to `http://localhost:8081`
