@@ -11,7 +11,7 @@
 - Start the container, removing any existing container - `sudo docker rm -f enimapod-api; sudo docker run --name enimapod-api -p 8080:80 -d enimapod-api`
 
 ### Access the web server
-- Go to `http://localhost:8080`
+- Go to `http://localhost:8081`
     - You should see the `index.html` page rendered.
     - Ensure you're using HTTP, your browser may try to redirect to HTTPS.
 
