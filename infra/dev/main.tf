@@ -45,24 +45,4 @@ resource "aws_ecr_repository" "this" {
   }
 }
 
-# Not best practice to push dock
-
-
-
-# resource "docker_container" "hello_world" {
-#   image = "enimapod-api:latest"
-#   name  = "enimapod-api"
-
-#   restart = "always"
-
-#   volumes {
-#     container_path = "/api"
-#     host_path = "/Users/e-anil/Desktop/enimapod/api"
-#   }
-#   ports {
-#     internal = 8081
-#     external = 8081
-#   }
-# }
-
 
