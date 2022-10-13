@@ -1,5 +1,6 @@
 api/target/
 
+.idea/
 
 # Terraform
 **/.terraform/*
