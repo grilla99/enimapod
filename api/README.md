@@ -1,4 +1,38 @@
-# Running the Hello World Example Directly
+# API Definition
+
+## Employee 
+
+`GET/employees` - Find all employees in table
+* Parameter Content Type: Application/JSON
+* Example Request:
+  * `GET http://ec2-endpoint.com:8081/employees/`
+
+`GET/employees/{employeeId}` - Find employee by ID
+* Parameter Content Type: Application/JSON
+* Example Request:
+  * `GET http://ec2-endpoint.com:8081/employees/1`
+
+`PUT/employees/{employeeId}?params` - Update an existing employee
+* Parameter Content Type: Application/JSON
+* Example Request:
+  * `PUT http://ec2-endpoint.com:8081/employees/1?name=Aaron&email=aarongrill@gmail.com`
+
+`POST/employees` - Add a new employee to the table
+* Parameter Content Type: Application/JSON
+* Example Request:
+  * `{
+    "name": "aaron",
+    "email": "aaron@gmail.com",
+    "dob": "2000-01-01"
+    }`
+
+`DELETE/employees/{employeeId}` - Deletes an employee
+* Parameter Content Type: Application/JSON
+* Example Request:
+  * `DELETE http://ec2-endpoint.com:8081/employees/1`
+
+## Running the Hello World Example Directly
+
 ---
 ### Prerequisites
 - Install Maven Version 3.8.6

@@ -1,4 +1,5 @@
-FROM adoptopenjdk/openjdk11:alpine-jre
+#FROM adoptopenjdk/openjdk11:alpine-jre
+FROM openjdk:17-alpine
 WORKDIR /opt/app
 ARG JAR_FILE=target/api-0.0.1-SNAPSHOT.jar
 
