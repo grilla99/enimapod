@@ -18,3 +18,9 @@
 ### Common commands
 - List running containers - `sudo docker container ls` (add `-a` to include stopped containers)
 - View container logs - `sudo docker logs enimapod-web`
+
+
+### Pushing image to ECR
+- [Build the container image](#build-the-container-image)
+- `docker tag enimapod-app:latest 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-server-repository:latest`
+- `docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-server-repository:latest`
