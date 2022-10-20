@@ -8,11 +8,11 @@ workflows:
       - terraform/fmt:
           checkout: true
           context: terraform
-          path: ~/project/infra/environments/dev
+          path: ./infra/environments/dev
       - terraform/validate:
           checkout: true
           context: terraform
-          path: ~/project/infra/environments/dev
+          path: ./infra/environments/dev
           requires:
             - terraform/fmt
       - terraform/plan:
@@ -20,14 +20,14 @@ workflows:
           context: terraform
           persist-workspace: true
           out: dev.tfplan
-          path: ~/project/infra/environments/dev
+          path: ./infra/environments/dev
           requires:
             - terraform/validate
       - terraform/apply:
           attach-workspace: true
           context: terraform
+          path: ./infra/environments/dev
           plan: dev.tfplan
-          path: ~/project/infra/environments/dev
           filters:
             branches:
               only: main
