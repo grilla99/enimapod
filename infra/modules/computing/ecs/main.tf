@@ -33,64 +33,52 @@ resource "aws_autoscaling_group" "ecs_cluster" {
   health_check_type         = "EC2"
 }
 
-resource "aws_ecr_repository" "api" {
-  name = "enimapod-app-ecr-repository"
-
-  tags = {
-    Environment = "dev"
-  }
-}
-
-resource "aws_ecr_repository" "web" {
-  name = "enimapod-web-server-repository"
-
-  tags = {
-    Environment = "dev"
-  }
-}
-
-# Note to Aidan:
-# API Task Works and Runs.
-# To have both tasks running need an instance with 1024MB (t2.micro and larger??) - Double check this
-# The configuration below is correct for the server but something to do with the Dockerfile / Nginx needs tweaking
 resource "aws_ecs_task_definition" "task_definition" {
   family = "service"
   container_definitions = jsonencode([
-    {
-      name      = "api"
-      image     = "342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest"
-      memory    = 512
-      cpu       = 512
-      essential = true
-      portMappings = [
-        {
-          containerPort = 8081
-          hostPort      = 8081
-        }
-      ]
-
-      logConfiguration = {
-        logDriver : "awslogs",
-        options = {
-          awslogs-region = "eu-west-2",
-          awslogs-group  = "/ecs/service"
-        }
-      }
-
-    }
-    #  ,
-    # {
-    #   name = "server"
-    #   image = "342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest"
-    #   memory = 512
-    #   essential = true
-    #   portMappings = [
-    #     {
-    #       containerPort = 8080
-    #       hostPort = 8080
-    #     }
-    #   ]
-    # }
+#    {
+#      name      = "api"
+#      image     = "342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest"
+#      memory    = 512
+#      cpu       = 512
+#      essential = true
+#      portMappings = [
+#        {
+#          containerPort = 8081
+#          hostPort      = 8081
+#        }
+#      ]
+#
+#      logConfiguration = {
+#        logDriver : "awslogs",
+#        options = {
+#          awslogs-region = "eu-west-2",
+#          awslogs-group  = "/ecs/service/api"
+#        }
+#      }
+#
+#    }
+#      ,
+     {
+       name = "server"
+       image = "342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest"
+       memory = 512
+       cpu = 512
+       essential = true
+       portMappings = [
+         {
+           containerPort = 80
+           hostPort = 80
+         }
+       ]
+       logConfiguration = {
+                 logDriver : "awslogs",
+                 options = {
+                   awslogs-region = "eu-west-2",
+                   awslogs-group  = "/ecs/service/web"
+                 }
+               }
+     }
   ])
 
   volume {
@@ -109,5 +97,10 @@ resource "aws_ecs_service" "worker" {
 resource "aws_cloudwatch_log_group" "logs" {
   name = "/ecs/service"
 }
+
+resource "aws_cloudwatch_log_group" "web_logs" {
+  name = "/ecs/service/web"
+}
+
 
 
