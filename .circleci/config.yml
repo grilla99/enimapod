@@ -8,20 +8,26 @@ workflows:
       - terraform/fmt:
           checkout: true
           context: terraform
+          path: ~/project/infra/environments/dev
       - terraform/validate:
           checkout: true
           context: terraform
+          path: ~/project/infra/environments/dev
           requires:
             - terraform/fmt
       - terraform/plan:
           checkout: true
           context: terraform
           persist-workspace: true
+          out: dev.tfplan
+          path: ~/project/infra/environments/dev
           requires:
             - terraform/validate
       - terraform/apply:
           attach-workspace: true
           context: terraform
+          plan: dev.tfplan
+          path: ~/project/infra/environments/dev
           filters:
             branches:
               only: main
