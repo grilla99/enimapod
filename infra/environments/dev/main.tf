@@ -81,8 +81,8 @@ resource "aws_security_group" "api_task" {
   ingress {
     description = "Inbound traffic to the Web Server Port"
     protocol    = "tcp"
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 80
+    to_port     = 80
     cidr_blocks = ["0.0.0.0/0"]
   }
 
