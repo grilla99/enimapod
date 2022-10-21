@@ -36,49 +36,48 @@ resource "aws_autoscaling_group" "ecs_cluster" {
 resource "aws_ecs_task_definition" "task_definition" {
   family = "service"
   container_definitions = jsonencode([
-#    {
-#      name      = "api"
-#      image     = "342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest"
-#      memory    = 512
-#      cpu       = 512
-#      essential = true
-#      portMappings = [
-#        {
-#          containerPort = 8081
-#          hostPort      = 8081
-#        }
-#      ]
-#
-#      logConfiguration = {
-#        logDriver : "awslogs",
-#        options = {
-#          awslogs-region = "eu-west-2",
-#          awslogs-group  = "/ecs/service/api"
-#        }
-#      }
-#
-#    }
-#      ,
-     {
-       name = "server"
-       image = "342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest"
-       memory = 512
-       cpu = 512
-       essential = true
-       portMappings = [
-         {
-           containerPort = 80
-           hostPort = 80
-         }
-       ]
-       logConfiguration = {
-                 logDriver : "awslogs",
-                 options = {
-                   awslogs-region = "eu-west-2",
-                   awslogs-group  = "/ecs/service/web"
-                 }
-               }
-     }
+    {
+      name      = "api"
+      image     = "342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest"
+      memory    = 512
+      cpu       = 512
+      essential = true
+      portMappings = [
+        {
+          containerPort = 8081
+          hostPort      = 8081
+        }
+      ]
+
+      logConfiguration = {
+        logDriver : "awslogs",
+        options = {
+          awslogs-region = "eu-west-2",
+          awslogs-group  = "/ecs/service/api"
+        }
+      }
+    }
+    #   ,
+    #  {
+    #    name = "server"
+    #    image = "342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest"
+    #    memory = 512
+    #    cpu = 512
+    #    essential = true
+    #    portMappings = [
+    #      {
+    #        containerPort = 80
+    #        hostPort = 80
+    #      }
+    #    ]
+    #    logConfiguration = {
+    #              logDriver : "awslogs",
+    #              options = {
+    #                awslogs-region = "eu-west-2",
+    #                awslogs-group  = "/ecs/service/web"
+    #              }
+    #            }
+    #  }
   ])
 
   volume {
@@ -95,7 +94,7 @@ resource "aws_ecs_service" "worker" {
 }
 
 resource "aws_cloudwatch_log_group" "logs" {
-  name = "/ecs/service"
+  name = "/ecs/service/api"
 }
 
 resource "aws_cloudwatch_log_group" "web_logs" {
