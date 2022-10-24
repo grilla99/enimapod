@@ -13,9 +13,11 @@ public class EmployeeController {
     @Autowired
     public EmployeeController(EmployeeService employeeService) {this.employeeService = employeeService;}
 
+    @CrossOrigin("*")
     @GetMapping
     public List<Employee> getEmployees(){ return employeeService.getEmployees();}
 
+    @CrossOrigin("*")
     @PostMapping
     public void registerNewEmployee(@RequestBody Employee employee) {
         employeeService.addNewEmployee(employee);
