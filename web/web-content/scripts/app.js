@@ -1,6 +1,6 @@
 const fetchUsers = () => {
     axios
-      .get('http://3.9.118.254:8081/api/v1/employee')
+      .get('http://13.40.44.186:8081/api/v1/employee')
       .then(response => {
         data = response.data;
         appendData(data);
@@ -18,7 +18,7 @@ const headers = {
 
 const createUser = user => {
   axios
-  .post('http://3.9.118.254:8081/api/v1/employee', user, {
+  .post('http://13.40.44.186:8081/api/v1/employee', user, {
     headers: headers
   }
   ) 
