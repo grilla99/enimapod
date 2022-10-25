@@ -7,3 +7,11 @@ body{
     background-attachment: fixed;
     background-position: center;
 }
+
+h1 {
+    color: white !important;
+}
+
+.employee-list {
+    color: white;
+}

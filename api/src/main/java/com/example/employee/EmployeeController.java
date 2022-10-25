@@ -23,6 +23,7 @@ public class EmployeeController {
         employeeService.addNewEmployee(employee);
     }
 
+    @CrossOrigin("*")
     @DeleteMapping(path = "{employeeId}")
     public void deleteEmployee(
             @PathVariable("employeeId") Long employeeId) {
