@@ -12,7 +12,7 @@
 // Handles the retrieval of users
 const fetchUsers = () => {
     axios
-      .get('http://18.130.79.148:8081/api/v1/employee')
+      .get('http://13.40.131.194:8081/api/v1/employee')
       .then(response => {
         const employees = response.data;
         displayEmployees(employees)
@@ -35,7 +35,7 @@ function displayEmployees(employees) {
 //  Handle User Creation
 const createUser = user => {
   axios
-  .post('http://18.130.79.148:8081/api/v1/employee', user, {
+  .post('http://13.40.131.194:8081/api/v1/employee', user, {
     headers: headers
   }
   ) 
@@ -81,9 +81,43 @@ const deleteEvent = deleteEmpForm.addEventListener('submit', event => {
 const deleteUser = id => {
   console.log(id)
   axios
-      .delete(`http://18.130.79.148:8081/api/v1/employee/${id}`, {
+      .delete(`http://13.40.131.194:8081/api/v1/employee/${id}`, {
         headers: headers
       })
       .catch(error => console.error(error))
+}
+
+// Handle User Updating
+const updateEmpForm = document.getElementById('update-employee-form')
+const updateEvent = updateEmpForm.addEventListener('submit', event=> {
+  event.preventDefault()
+  const id = document.querySelector('#update-id').value
+
+  updateUser(id)
+})
+
+const updateUser = id => {
+  if (document.getElementById('update-id').value.length == 0) {
+    alert("You need to enter a value for user ID")
+    return false
+  }
+
+  const updateFields = document.querySelectorAll('input[type="text"][id^="update"]');
+  const user = {}
+
+  // If a field isn't empty. Remove the update from the field name
+  // i.e. update-name become name. Add this to the user object to be replaced
+  updateFields.forEach(field => {
+    if (field.value) {
+      key = (field.id).replace("update-", "")
+      user[key] = field.value
+    }
+  });
+  
+  axios
+    .put(`13.40.131.194:8081/api/v1/employee/${id}`, user, {
+      headers: headers
+    })
+    .catch(error => console.error(error))
 }
 

@@ -30,6 +30,7 @@ public class EmployeeController {
         employeeService.deleteEmployee(employeeId);
     }
 
+    @CrossOrigin("*")
     @PutMapping(path = "{employeeId}")
     public void updateStudent(
             @PathVariable("employeeId") Long studentId,
