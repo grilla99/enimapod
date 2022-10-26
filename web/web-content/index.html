@@ -5,10 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Enimapod</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="assets/favicon.jpg">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
-    <body>
-        Hey
+    <body>        
+        <div>
+            <h1>Employees</h1>
+            <button onclick="fetchUsers()">List Employees</button>
+            <div id="employee-list"></div>
+        </div>
+        <div id="create-user">
+            <h1>Register an Employee</h1>
+            <div class="form-group">
+                <form id="register-employee-form">
+                    <input type="text" id="reg-name" placeholder="Enter name">
+                    <input type="text" id="reg-email" placeholder="Enter email">
+                    <input type="text" id="reg-dob" placeholder="2000-01-01">
+                    <button type="submit">Add employee</button>
+                </form>
+            </div>
+        </div>
+        <div id="delete-user">
+            <h1>Delete Employee</h1>
+            <form id="delete-employee-form"> 
+                <input type="text" id="del-id" placeholder="Enter employee ID">
+                <button type="submit">Delete employee</button>
+            </form>
+        </div>
+        <div id="update-user">
+            <h1>Update Employee</h1>
+            <form id="update-employee-form">
+                <input type="number" id="update-id" placeholder="Enter existing employee ID">
+                <input type="text" id="update-name" placeholder="Enter a new name">
+                <input type="text" id="update-email" placeholder="Enter an unused email address">
+                <input type="text" id="update-dob" placeholder="Enter a different date of birth">
+                <button type="submit"></button>
+            </form>
+        </div>
     </body>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="scripts/app.js"></script>
 </html>

@@ -2,6 +2,8 @@ api/target/
 
 .idea/
 
+web/node_modules/*
+
 # Terraform
 **/.terraform/*
 
