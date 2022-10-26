@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,11 +42,16 @@ public class EmployeeService {
     }
 
     @Transactional
-    public void updateEmployee(Long employeeId, String name, String email) {
+    public void updateEmployee(Long employeeId, Employee updatedEmployee) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new IllegalStateException(
                         "Employee with ID" + employeeId + "does not exist"
                 ));
+
+        String name = updatedEmployee.getName();
+        String email = updatedEmployee.getEmail();
+        LocalDate dob = updatedEmployee.getDob();
+
 
         if (name != null && name.length() > 0 && !Objects.equals(employee.getName(), name)) {
             employee.setName(name);
@@ -57,6 +63,10 @@ public class EmployeeService {
                 throw new IllegalStateException("Email address in use.");
             }
             employee.setEmail(email);
+        }
+
+        if (dob != null && !Objects.equals(employee.getDob(), dob)) {
+            employee.setDob(dob);
         }
     }
 }

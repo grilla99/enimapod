@@ -34,9 +34,8 @@ public class EmployeeController {
     @PutMapping(path = "{employeeId}")
     public void updateStudent(
             @PathVariable("employeeId") Long studentId,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String email
+            @RequestBody Employee updatedDetails
     ) {
-        employeeService.updateEmployee(studentId, name, email);
+        employeeService.updateEmployee(studentId, updatedDetails);
     }
 }

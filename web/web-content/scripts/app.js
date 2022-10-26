@@ -12,7 +12,7 @@
 // Handles the retrieval of users
 const fetchUsers = () => {
     axios
-      .get('http://13.40.131.194:8081/api/v1/employee')
+      .get('http://18.133.229.250:8081/api/v1/employee')
       .then(response => {
         const employees = response.data;
         displayEmployees(employees)
@@ -35,7 +35,7 @@ function displayEmployees(employees) {
 //  Handle User Creation
 const createUser = user => {
   axios
-  .post('http://13.40.131.194:8081/api/v1/employee', user, {
+  .post('http://18.133.229.250:8081/api/v1/employee', user, {
     headers: headers
   }
   ) 
@@ -81,7 +81,7 @@ const deleteEvent = deleteEmpForm.addEventListener('submit', event => {
 const deleteUser = id => {
   console.log(id)
   axios
-      .delete(`http://13.40.131.194:8081/api/v1/employee/${id}`, {
+      .delete(`http://18.133.229.250:8081/api/v1/employee/${id}`, {
         headers: headers
       })
       .catch(error => console.error(error))
@@ -115,7 +115,7 @@ const updateUser = id => {
   });
   
   axios
-    .put(`13.40.131.194:8081/api/v1/employee/${id}`, user, {
+    .put(`http://18.133.229.250:8081/api/v1/employee/${id}`, user, {
       headers: headers
     })
     .catch(error => console.error(error))
