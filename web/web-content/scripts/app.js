@@ -1,41 +1,47 @@
-// const createLi = employee => {
-//     // Add user details to list
-//     const li = document.createElement('li')
-//     li.textContent = `${employee.id}: ${employee.name}, ${employee.email}, ${employee.dob}`
-
-//     // Attach on click event to delete the user
-//     li.onclick = e = deleteUser(li, employee.id)
-
-//     return li
-// }
-
 // Handles the retrieval of users
 const fetchUsers = () => {
     axios
-      .get('http://18.133.229.250:8081/api/v1/employee')
+      .get('http://3.8.154.47:8081/api/v1/employee')
       .then(response => {
         const employees = response.data;
-        displayEmployees(employees)
+        const table = document.getElementById('table-row')
+        generateTable(table, employees)
+
       })
       .catch(error => console.error(error))
   };
 
-// Display Users
-function displayEmployees(employees) {
-  var mainContainer = document.getElementById("employee-list")
-  employees.forEach(employee => {
-    var div = document.createElement("div");
-    div.innerHTML = `ID: ${employee.id}:${employee.name}, ${employee.email}, ${employee.dob}`
-    div.classList.add('employee-list')
-    mainContainer.appendChild(div);
-  });
+const generateTable = (table, data) => {
+  for (let element of data) {
+    let row = table.insertRow();
+    
+    for (key in element) {
+      let cell = row.insertCell();
+      let text = document.createTextNode(element[key])
+      cell.appendChild(text);
+    }
+  }
 }
+
+
+
+
+// // Display Users
+// function displayEmployees(employees) {
+//   var mainContainer = document.getElementById("employee-list")
+//   employees.forEach(employee => {
+//     var div = document.createElement("div");
+//     div.innerHTML = `ID: ${employee.id}:${employee.name}, ${employee.email}, ${employee.dob}`
+//     div.classList.add('employee-list')
+//     mainContainer.appendChild(div);
+//   });
+// }
 
 
 //  Handle User Creation
 const createUser = user => {
   axios
-  .post('http://18.133.229.250:8081/api/v1/employee', user, {
+  .post('http://3.8.154.47:8081/api/v1/employee', user, {
     headers: headers
   }
   ) 
@@ -81,7 +87,7 @@ const deleteEvent = deleteEmpForm.addEventListener('submit', event => {
 const deleteUser = id => {
   console.log(id)
   axios
-      .delete(`http://18.133.229.250:8081/api/v1/employee/${id}`, {
+      .delete(`http://3.8.154.47:8081/api/v1/employee/${id}`, {
         headers: headers
       })
       .catch(error => console.error(error))
@@ -115,7 +121,7 @@ const updateUser = id => {
   });
   
   axios
-    .put(`http://18.133.229.250:8081/api/v1/employee/${id}`, user, {
+    .put(`http://3.8.154.47:8081/api/v1/employee/${id}`, user, {
       headers: headers
     })
     .catch(error => console.error(error))
