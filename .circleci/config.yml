@@ -3,27 +3,17 @@ version: '2.1'
 orbs:
   terraform: circleci/terraform@3.1.0
   docker: circleci/docker@2.1.4
-workflows:
-    jobs:
-      - build:
-          machine:
-            image: ubuntu-2204:2022.04.2
-          steps:
-            - run: docker build -f api/docker/Dockerfile -t enimapod-api .
 
-#      - aws-ecr/build-and-push-image:
-#          aws-access-key-id: AWS_ACCESS_KEY_ID
-#          aws-cli-version: latest
-#          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-#          context: terraform
-#          create-repo: false
-#          dockerfile: Dockerfile
-#          path: /api/docker
-#          region: eu-west-2
-#          registry-id: AWS_ECR_REGISTRY_ID
-#          repo: enimapod-app-ecr-repository
+jobs:
+  build-docker:
+    executor: docker/docker
+    steps:
+      - docker/build:
+        image: enimapod-api
+        path: api/docker/
+        tag: latest
 
-#
+
 #  deploy_infra:
 #    jobs:
 #      - terraform/fmt:
