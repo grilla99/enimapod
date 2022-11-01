@@ -50,7 +50,7 @@ workflows:
     jobs:
       - build
       - build-web-container
-      - deploy-infra:
+      - deploy_infrastructure:
           jobs:
             - terraform/fmt:
                 checkout: true
