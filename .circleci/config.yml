@@ -16,7 +16,7 @@ jobs:
           command: docker build -f api/docker/Dockerfile -t enimapod-api .
       - run:
           name: Output AWS Credentials
-          command: echo "[default] \n aws_access_key_id = $AWS_ACCESS_KEY_ID \n aws_secret_access_key = $AWS_SECRET_ACCESS_KEY
+          command: echo "[default] \n aws_access_key_id = $AWS_ACCESS_KEY_ID \n aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/credentials
 
 
 #  deploy_infra:
