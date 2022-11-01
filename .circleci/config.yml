@@ -7,7 +7,7 @@ orbs:
   aws-ecr: circleci/aws-ecr@8.1.3
 
 jobs:
-  build-container: # Name of the Job
+  build-api-container: # Name of the Job
     machine: # Executor Type
       image: ubuntu-2004:202010-01 # LinuxVM Execution Environment
     steps:
@@ -26,34 +26,43 @@ jobs:
           name: Push Image to Repo
           command: docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest
 
+  deploy_infra:
+    jobs:
+      - terraform/fmt:
+          checkout: true
+          context: terraform
+          path: ./infra/environments/dev
+      - terraform/validate:
+          checkout: true
+          context: terraform
+          path: ./infra/environments/dev
+          requires:
+            - terraform/fmt
+      - terraform/plan:
+          checkout: true
+          context: terraform
+          persist-workspace: true
+          out: dev.tfplan
+          path: ./infra/environments/dev
+          requires:
+            - terraform/validate
+      - terraform/apply:
+          attach-workspace: true
+          context: terraform
+          path: ./infra/environments/dev
+          plan: dev.tfplan
+          filters:
+            branches:
+              only: main
+          requires:
+            - terraform/plan
 
-#  deploy_infra:
-#    jobs:
-#      - terraform/fmt:
-#          checkout: true
-#          context: terraform
-#          path: ./infra/environments/dev
-#      - terraform/validate:
-#          checkout: true
-#          context: terraform
-#          path: ./infra/environments/dev
-#          requires:
-#            - terraform/fmt
-#      - terraform/plan:
-#          checkout: true
-#          context: terraform
-#          persist-workspace: true
-#          out: dev.tfplan
-#          path: ./infra/environments/dev
-#          requires:
-#            - terraform/validate
-#      - terraform/apply:
-#          attach-workspace: true
-#          context: terraform
-#          path: ./infra/environments/dev
-#          plan: dev.tfplan
-#          filters:
-#            branches:
-#              only: main
-#          requires:
-#            - terraform/plan
+workflows:
+  version: 1
+  build_containers:
+    jobs:
+      - build-api-container
+#      - build-web-container
+  provision_infrastructure:
+    jobs:
+      - deploy_infra
