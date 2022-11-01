@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout # Check out source code to the configured path (defaults to working directory)
       - run:
-          name: Build Docker Image
+          name: Build API Docker Image
           command: docker build -f api/docker/Dockerfile -t enimapod-api .
       - run:
           name: Get ECR Login
@@ -22,36 +22,55 @@ jobs:
           name: Tag Image
           command: docker tag enimapod-api:latest 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest
       - run:
-          name: Push Image to Repo
+          name: Push API Image to Repo
           command: docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest
-  deploy_infra:
-    - steps:
-      - terraform/fmt:
-          checkout: true
-          context: terraform
-          path: ./infra/environments/dev
-      - terraform/validate:
-          checkout: true
-          context: terraform
-          path: ./infra/environments/dev
-          requires:
-            - terraform/fmt
-      - terraform/plan:
-          checkout: true
-          context: terraform
-          persist-workspace: true
-          out: dev.tfplan
-          path: ./infra/environments/dev
-          requires:
-            - terraform/validate
-      - terraform/apply:
-          attach-workspace: true
-          context: terraform
-          path: ./infra/environments/dev
-          plan: dev.tfplan
-          filters:
-            branches:
-              only: main
-          requires:
-            - terraform/plan
+  build-web-container:
+    machine:
+      image: ubuntu-2004:202010-01
+      steps:
+        - checkout
+        - run:
+            name: Build API Docker Image
+            command: docker build -f web/docker/Dockerfile -t enimapod-web .
+        - run:
+            name: Get ECR Login
+            command: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 342715877717.dkr.ecr.eu-west-2.amazonaws.com
+            context: terraform
+        - run:
+            name: Tag Web Image
+            command: docker tag enimapod-web:latest 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest
+        - run:
+            name: Push Web Image to Repo
+            command: docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest
 
+#  deploy_infra:
+#    - steps:
+#      - terraform/fmt:
+#          checkout: true
+#          context: terraform
+#          path: ./infra/environments/dev
+#      - terraform/validate:
+#          checkout: true
+#          context: terraform
+#          path: ./infra/environments/dev
+#          requires:
+#            - terraform/fmt
+#      - terraform/plan:
+#          checkout: true
+#          context: terraform
+#          persist-workspace: true
+#          out: dev.tfplan
+#          path: ./infra/environments/dev
+#          requires:
+#            - terraform/validate
+#      - terraform/apply:
+#          attach-workspace: true
+#          context: terraform
+#          path: ./infra/environments/dev
+#          plan: dev.tfplan
+#          filters:
+#            branches:
+#              only: main
+#          requires:
+#            - terraform/plan
+#
