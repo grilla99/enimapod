@@ -13,7 +13,7 @@ workflows:
           context: terraform
           create-repo: false
           dockerfile: Dockerfile
-          path: ./api/docker
+          path: ../api/docker
           region: eu-west-2
           registry-id: AWS_ECR_REGISTRY_ID
           repo: enimapod-app-ecr-repository
