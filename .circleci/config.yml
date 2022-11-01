@@ -6,18 +6,13 @@ orbs:
 workflows:
   build_and_push_images:
     jobs:
-      - aws-ecr/build-and-push-image:
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-cli-version: latest
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          context: terraform
-          create-repo: false
-          dockerfile: Dockerfile
-          path: ./api/docker
-          region: eu-west-2
-          registry-id: AWS_ECR_REGISTRY_ID
-          extra-build-args: '[--file Dockerfile --target enimapod-api .]'
-          repo: enimapod-app-ecr-repository
+      build:
+        machine:
+          image: ubuntu-2204:2022.04.2
+        steps:
+          - run: |
+              docker build -f docker/Dockerfile -t enimapod-api .
+              
 
 
   deploy_infra:
