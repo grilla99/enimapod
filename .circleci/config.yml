@@ -16,7 +16,7 @@ workflows:
           path: ./api/docker
           region: eu-west-2
           registry-id: AWS_ECR_REGISTRY_ID
-          extra-build-args: '-f=Dockerfile -t=enimapod-api .'
+          extra-build-args: '--f Dockerfile, --t enimapod-api .'
           repo: enimapod-app-ecr-repository
 
 
