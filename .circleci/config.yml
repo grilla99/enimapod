@@ -11,7 +11,8 @@ jobs:
       - checkout
 
       - run:
-          command: docker build -f docker/Dockerfile -t enimapod-api .
+          name: Build Docker Image
+          command: docker build -f api/docker/Dockerfile -t enimapod-api .
 
 
 #  deploy_infra:
