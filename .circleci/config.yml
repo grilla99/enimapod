@@ -3,15 +3,15 @@ version: '2.1'
 orbs:
   terraform: circleci/terraform@3.1.0
   docker: circleci/docker@2.1.4
-
 jobs:
-  build-docker:
-    executor: docker/docker
+  build:
+    docker:
+      - image: cimg/base:2021.04
     steps:
-      - docker/build:
-        image: enimapod-api
-        path: api/docker/
-        tag: latest
+      - checkout
+
+      - run:
+          command: docker build -f docker/Dockerfile -t enimapod-api .
 
 
 #  deploy_infra:
