@@ -5,8 +5,10 @@ orbs:
   docker: circleci/docker@2.1.4
 jobs:
   build:
-    docker:
-      - image: cimg/base:2021.04
+    machine:
+      image: ubuntu-2004:202010-01
+#    docker:
+#      - image: cimg/base:2021.04
     steps:
       - checkout
 
