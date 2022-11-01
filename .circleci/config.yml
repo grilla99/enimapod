@@ -2,18 +2,56 @@
 version: '2.1'
 orbs:
   terraform: circleci/terraform@3.1.0
+  docker: circleci/docker@2.1.4
+  aws-cli: circleci/aws-cli@3.1.3
   aws-ecr: circleci/aws-ecr@8.1.3
+
 jobs:
-  build-docker:
-    machine:
-      image: ubuntu-2204:2022.04.2
+  build-app-container: # Name of the Job
+    machine: # Executor Type
+      image: ubuntu-2004:202010-01 # LinuxVM Execution Environment
     steps:
-      - run: docker build -f docker/Dockerfile -t enimapod-api .
+      - checkout # Check out source code to the configured path (defaults to working directory)
+      - run:
+          name: Build API Docker Image
+          command: docker build -f api/docker/Dockerfile -t enimapod-api .
+      - run:
+          name: Get ECR Login
+          command: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 342715877717.dkr.ecr.eu-west-2.amazonaws.com
+          context: terraform
+      - run:
+          name: Tag Image
+          command: docker tag enimapod-api:latest 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest
+      - run:
+          name: Push API Image to Repo
+          command: docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest
+
+  build-web-container:
+    machine:
+       image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run:
+          name: Build API Docker Image
+          command: docker build -f web/docker/Dockerfile -t enimapod-web .
+      - run:
+          name: Get ECR Login
+          command: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 342715877717.dkr.ecr.eu-west-2.amazonaws.com
+          context: terraform
+      - run:
+          name: Tag Web Image
+          command: docker tag enimapod-web:latest 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest
+      - run:
+          name: Push Web Image to Repo
+          command: docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest
 
 
-
-
-  deploy_infra:
+workflows:
+  build-containers:
+    jobs:
+      - build-app-container
+      - build-web-container
+  deploy-infrastructure:
     jobs:
       - terraform/fmt:
           checkout: true
@@ -43,3 +81,7 @@ jobs:
               only: main
           requires:
             - terraform/plan
+
+
+
+
