@@ -7,7 +7,7 @@ orbs:
   aws-ecr: circleci/aws-ecr@8.1.3
 
 jobs:
-  build-push-api-container: # Name of the Job
+  build-container: # Name of the Job
     machine: # Executor Type
       image: ubuntu-2004:202010-01 # LinuxVM Execution Environment
     steps:
