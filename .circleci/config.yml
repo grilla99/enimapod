@@ -6,6 +6,15 @@ orbs:
   aws-cli: circleci/aws-cli@3.1.3
   aws-ecr: circleci/aws-ecr@8.1.3
 
+workflows:
+  version: 1
+  build_containers:
+    jobs:
+      - build-api-container
+  provision_infrastructure:
+    jobs:
+      - deploy_infra
+
 jobs:
   build-api-container: # Name of the Job
     machine: # Executor Type
@@ -27,6 +36,7 @@ jobs:
           command: docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest
 
   deploy_infra:
+#    jobs:
     - steps:
       - terraform/fmt:
           checkout: true
@@ -57,12 +67,3 @@ jobs:
           requires:
             - terraform/plan
 
-workflows:
-  version: 1
-  build_containers:
-    jobs:
-      - build-api-container
-#      - build-web-container
-  provision_infrastructure:
-    jobs:
-      - deploy_infra
