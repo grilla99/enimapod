@@ -6,7 +6,7 @@ orbs:
   aws-cli: circleci/aws-cli@3.1.3
   aws-ecr: circleci/aws-ecr@8.1.3
 jobs:
-  - build-api-container: # Name of the Job
+  build-api-container: # Name of the Job
     machine: # Executor Type
       image: ubuntu-2004:202010-01 # LinuxVM Execution Environment
     steps:
@@ -24,8 +24,8 @@ jobs:
       - run:
           name: Push Image to Repo
           command: docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest
-  - deploy_infra:
-    steps:
+  deploy_infra:
+    jobs:
       - terraform/fmt:
           checkout: true
           context: terraform
