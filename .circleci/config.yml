@@ -50,36 +50,36 @@ workflows:
     jobs:
       - build
       - build-web-container
-      - deploy_infrastructure:
-          jobs:
-            - terraform/fmt:
-                checkout: true
-                context: terraform
-                path: ./infra/environments/dev
-            - terraform/validate:
-                checkout: true
-                context: terraform
-                path: ./infra/environments/dev
-                requires:
-                  - terraform/fmt
-            - terraform/plan:
-                checkout: true
-                context: terraform
-                persist-workspace: true
-                out: dev.tfplan
-                path: ./infra/environments/dev
-                requires:
-                  - terraform/validate
-            - terraform/apply:
-                attach-workspace: true
-                context: terraform
-                path: ./infra/environments/dev
-                plan: dev.tfplan
-                filters:
-                  branches:
-                    only: main
-                requires:
-                  - terraform/plan
+  deploy_infrastructure:
+    jobs:
+      - terraform/fmt:
+          checkout: true
+          context: terraform
+          path: ./infra/environments/dev
+      - terraform/validate:
+          checkout: true
+          context: terraform
+          path: ./infra/environments/dev
+          requires:
+            - terraform/fmt
+      - terraform/plan:
+          checkout: true
+          context: terraform
+          persist-workspace: true
+          out: dev.tfplan
+          path: ./infra/environments/dev
+          requires:
+            - terraform/validate
+      - terraform/apply:
+          attach-workspace: true
+          context: terraform
+          path: ./infra/environments/dev
+          plan: dev.tfplan
+          filters:
+            branches:
+              only: main
+          requires:
+            - terraform/plan
 
 
 
