@@ -4,7 +4,7 @@ orbs:
   terraform: circleci/terraform@3.1.0
   aws-ecr: circleci/aws-ecr@8.1.3
 workflows:
-  build_and_push_image:
+  build_and_push_images:
     jobs:
       - aws-ecr/build-and-push-image:
           aws-access-key-id: AWS_ACCESS_KEY_ID
@@ -18,33 +18,34 @@ workflows:
           registry-id: AWS_ECR_REGISTRY_ID
           repo: enimapod-app-ecr-repository
 
-  # deploy_infra:
-  #   jobs:
-  #     - terraform/fmt:
-  #         checkout: true
-  #         context: terraform
-  #         path: ./infra/environments/dev
-  #     - terraform/validate:
-  #         checkout: true
-  #         context: terraform
-  #         path: ./infra/environments/dev
-  #         requires:
-  #           - terraform/fmt
-  #     - terraform/plan:
-  #         checkout: true
-  #         context: terraform
-  #         persist-workspace: true
-  #         out: dev.tfplan
-  #         path: ./infra/environments/dev
-  #         requires:
-  #           - terraform/validate
-  #     - terraform/apply:
-  #         attach-workspace: true
-  #         context: terraform
-  #         path: ./infra/environments/dev
-  #         plan: dev.tfplan
-  #         filters:
-  #           branches:
-  #             only: main
-  #         requires:
-  #           - terraform/plan
+
+  deploy_infra:
+    jobs:
+      - terraform/fmt:
+          checkout: true
+          context: terraform
+          path: ./infra/environments/dev
+      - terraform/validate:
+          checkout: true
+          context: terraform
+          path: ./infra/environments/dev
+          requires:
+            - terraform/fmt
+      - terraform/plan:
+          checkout: true
+          context: terraform
+          persist-workspace: true
+          out: dev.tfplan
+          path: ./infra/environments/dev
+          requires:
+            - terraform/validate
+      - terraform/apply:
+          attach-workspace: true
+          context: terraform
+          path: ./infra/environments/dev
+          plan: dev.tfplan
+          filters:
+            branches:
+              only: main
+          requires:
+            - terraform/plan
