@@ -45,6 +45,8 @@ jobs:
           command: docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest
 
   deploy-infra:
+    machine:
+      image: ubuntu-2004:202010-01
     steps:
       - terraform/fmt:
           checkout: true
