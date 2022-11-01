@@ -18,6 +18,7 @@ workflows:
           registry-id: AWS_ECR_REGISTRY_ID
           repo: enimapod-app-ecr-repository
 
+
   deploy_infra:
     jobs:
       - terraform/fmt:
