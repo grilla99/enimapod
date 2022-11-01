@@ -44,41 +44,43 @@ jobs:
           name: Push Web Image to Repo
           command: docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest
 
+  deploy-infra:
+    - steps:
+        - terraform/fmt:
+            checkout: true
+            context: terraform
+            path: ./infra/environments/dev
+        - terraform/validate:
+            checkout: true
+            context: terraform
+            path: ./infra/environments/dev
+            requires:
+              - terraform/fmt
+        - terraform/plan:
+            checkout: true
+            context: terraform
+            persist-workspace: true
+            out: dev.tfplan
+            path: ./infra/environments/dev
+            requires:
+              - terraform/validate
+        - terraform/apply:
+            attach-workspace: true
+            context: terraform
+            path: ./infra/environments/dev
+            plan: dev.tfplan
+            filters:
+              branches:
+                only: main
+            requires:
+              - terraform/plan
+
 workflows:
   my-workflow:
     jobs:
       - build
       - build-web-container
+      - deploy-infra
 
 
-#  deploy_infra:
-#    - steps:
-#      - terraform/fmt:
-#          checkout: true
-#          context: terraform
-#          path: ./infra/environments/dev
-#      - terraform/validate:
-#          checkout: true
-#          context: terraform
-#          path: ./infra/environments/dev
-#          requires:
-#            - terraform/fmt
-#      - terraform/plan:
-#          checkout: true
-#          context: terraform
-#          persist-workspace: true
-#          out: dev.tfplan
-#          path: ./infra/environments/dev
-#          requires:
-#            - terraform/validate
-#      - terraform/apply:
-#          attach-workspace: true
-#          context: terraform
-#          path: ./infra/environments/dev
-#          plan: dev.tfplan
-#          filters:
-#            branches:
-#              only: main
-#          requires:
-#            - terraform/plan
-#
+
