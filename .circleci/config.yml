@@ -5,16 +5,18 @@ orbs:
   docker: circleci/docker@2.1.4
 
 jobs:
-  build:
-    machine:
-      image: ubuntu-2004:202010-01
+  build: # Name of the Job
+    machine: # Executor Type
+      image: ubuntu-2004:202010-01 # LinuxVM Execution Environment
     steps:
-      - checkout
-
+      - checkout # Check out source code to the configured path (defaults to working directory)
       - run:
           name: Build Docker Image
           command: docker build -f api/docker/Dockerfile -t enimapod-api .
-
+      - run:
+          name: Get ECR Login
+          command: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 342715877717.dkr.ecr.eu-west-2.amazonaws.com
+          context: terraform
 
 #  deploy_infra:
 #    jobs:
