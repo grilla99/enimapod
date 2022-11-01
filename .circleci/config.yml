@@ -24,24 +24,32 @@ jobs:
       - run:
           name: Push API Image to Repo
           command: docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest
-#  build-web-container:
-#    machine:
-#      image: ubuntu-2004:202010-01
-#      steps:
-#        - checkout
-#        - run:
-#            name: Build API Docker Image
-#            command: docker build -f web/docker/Dockerfile -t enimapod-web .
-#        - run:
-#            name: Get ECR Login
-#            command: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 342715877717.dkr.ecr.eu-west-2.amazonaws.com
-#            context: terraform
-#        - run:
-#            name: Tag Web Image
-#            command: docker tag enimapod-web:latest 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest
-#        - run:
-#            name: Push Web Image to Repo
-#            command: docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest
+
+  build-web-container:
+    machine:
+      image: ubuntu-2004:202010-01
+      steps:
+        - checkout
+        - run:
+            name: Build API Docker Image
+            command: docker build -f web/docker/Dockerfile -t enimapod-web .
+        - run:
+            name: Get ECR Login
+            command: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 342715877717.dkr.ecr.eu-west-2.amazonaws.com
+            context: terraform
+        - run:
+            name: Tag Web Image
+            command: docker tag enimapod-web:latest 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest
+        - run:
+            name: Push Web Image to Repo
+            command: docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest
+
+workflows:
+  my-workflow:
+    jobs:
+      - build
+      - build-web-container
+
 
 #  deploy_infra:
 #    - steps:
