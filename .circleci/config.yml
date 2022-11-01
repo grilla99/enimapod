@@ -24,7 +24,7 @@ jobs:
       - run:
           name: Push Image to Repo
           command: docker push 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest
-  deploy_infra:
+deploy_infra:
     steps:
       - terraform/fmt:
           checkout: true
