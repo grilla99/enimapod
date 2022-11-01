@@ -19,6 +19,10 @@ jobs:
           name: Get ECR Login
           command: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 342715877717.dkr.ecr.eu-west-2.amazonaws.com
           context: terraform
+      - run:
+          name: Tag Image
+          command: docker tag enimapod-api:latest 342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-app-ecr-repository:latest
+
 
 #  deploy_infra:
 #    jobs:
