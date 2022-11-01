@@ -6,7 +6,12 @@ orbs:
 workflows:
   build_and_push_images:
     jobs:
-      - run: docker build -f api/docker/Dockerfile -t enimapod-api .
+      - build:
+          machine:
+            image: ubuntu-2204:2022.04.2
+          steps:
+            - run: docker build -f api/docker/Dockerfile -t enimapod-api .
+
 #      - aws-ecr/build-and-push-image:
 #          aws-access-key-id: AWS_ACCESS_KEY_ID
 #          aws-cli-version: latest
