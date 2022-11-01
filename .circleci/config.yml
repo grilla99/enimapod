@@ -15,7 +15,7 @@ workflows:
           dockerfile: Dockerfile
           path: ./api/docker
           region: eu-west-2
-          registry-id: 342715877717
+          registry-id: AWS_ECR_REGISTRY_ID
           repo: enimapod-app-ecr-repository
 
   deploy_infra:
