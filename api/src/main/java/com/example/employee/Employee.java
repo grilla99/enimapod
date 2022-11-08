@@ -1,5 +1,7 @@
 package com.example.employee;
 
+import com.example.department.Department;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
@@ -17,7 +19,7 @@ public class Employee {
     )
     @GeneratedValue (
             strategy = GenerationType.SEQUENCE,
-            generator = "student_sequence"
+            generator = "employee_sequence"
     )
     private Long id;
     private String name;
@@ -26,19 +28,25 @@ public class Employee {
     @Transient
     private Integer age;
 
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
+
     public Employee() {}
 
-    public Employee(Long id, String name, String email, LocalDate dob) {
+    public Employee(Long id, String name, String email, LocalDate dob, Department department) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.dob = dob;
+        this.department = department;
     }
 
-    public Employee(String name, String email, LocalDate dob) {
+    public Employee(String name, String email, LocalDate dob, Department department) {
         this.name = name;
         this.email = email;
         this.dob = dob;
+        this.department = department;
     }
 
     public Long getId() {
@@ -79,6 +87,14 @@ public class Employee {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     @Override
