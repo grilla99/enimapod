@@ -1,0 +1,11 @@
+create table department (id bigint not null, location varchar(255), name varchar(255), primary key (id)) engine=InnoDB;
+create table department_sequence (next_val bigint) engine=InnoDB;
+insert into department_sequence values ( 1 );
+create table employee (id bigint not null, dob date, email varchar(255), first_name varchar(255), last_name varchar(255), department_id bigint not null, user_id bigint not null, primary key (id)) engine=InnoDB;
+create table employee_sequence (next_val bigint) engine=InnoDB;
+insert into employee_sequence values ( 1 );
+create table hibernate_sequence (next_val bigint) engine=InnoDB;
+insert into hibernate_sequence values ( 1 );
+create table user (id bigint not null, date_created date, email varchar(255), password varchar(255), username varchar(255), primary key (id)) engine=InnoDB;
+alter table employee add constraint FKbejtwvg9bxus2mffsm3swj3u9 foreign key (department_id) references department (id);
+alter table employee add constraint FK6lk0xml9r7okjdq0onka4ytju foreign key (user_id) references user (id);

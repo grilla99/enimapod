@@ -22,9 +22,12 @@
                 <table class="table table-striped" id="employee-table">
                     <thead>
                         <th scope="col">ID</th>
-                        <th scope="col">Name</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
                         <th scope="col">Email</th>
+                        <th scope="col">DoB</th>
                         <th scope="col">Age</th>
+                        <th scope="col">Department</th>
                     </thead>
                     <tbody id="table-row">
                     </tbody>
@@ -60,7 +63,8 @@
             <h1>Update Employee</h1>
             <form id="update-employee-form">
                 <input type="number" id="update-id" placeholder="Enter existing employee ID">
-                <input type="text" id="update-name" placeholder="Enter a new name">
+                <input type="text" id="update-first_name" placeholder="Enter a different first name">
+                <input type="text" id="update-last_name" placeholder="Enter a different last name">
                 <input type="text" id="update-email" placeholder="Enter an unused email address">
                 <input type="text" id="update-dob" placeholder="Enter a different date of birth">
                 <button type="submit" class="btn btn-edit">Submit</button>

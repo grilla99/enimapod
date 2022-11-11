@@ -1,6 +1,9 @@
 package com.example.department;
 
 import com.example.employee.Employee;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -8,7 +11,15 @@ import java.util.Set;
 @Entity
 public class Department {
     @Id
-    @GeneratedValue
+    @SequenceGenerator(
+            name = "department_sequence",
+            sequenceName = "department_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue (
+            strategy = GenerationType.SEQUENCE,
+            generator = "department_sequence"
+    )
     private long id;
 
     @Column
@@ -17,6 +28,7 @@ public class Department {
     private String location;
 
     @OneToMany(mappedBy="department")
+    @JsonBackReference
     private Set<Employee> employees;
 
     public Department(String name, String location) {

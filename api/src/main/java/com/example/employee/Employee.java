@@ -1,6 +1,10 @@
 package com.example.employee;
 
 import com.example.department.Department;
+import com.example.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -22,7 +26,8 @@ public class Employee {
             generator = "employee_sequence"
     )
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private LocalDate dob;
     @Transient
@@ -30,23 +35,32 @@ public class Employee {
 
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
+    @JsonManagedReference
     private Department department;
+
+    @OneToOne
+    @JoinColumn(name="user_id", nullable = false)
+    @JsonBackReference
+    private User user;
 
     public Employee() {}
 
-    public Employee(Long id, String name, String email, LocalDate dob, Department department) {
+    public Employee(Long id, String firstName, String lastName, String email, LocalDate dob, Department department) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.dob = dob;
         this.department = department;
     }
 
-    public Employee(String name, String email, LocalDate dob, Department department) {
-        this.name = name;
+    public Employee(String firstName, String lastName, String email, LocalDate dob, Department department, User user) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.dob = dob;
         this.department = department;
+        this.user = user;
     }
 
     public Long getId() {
@@ -57,12 +71,20 @@ public class Employee {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -97,14 +119,26 @@ public class Employee {
         this.department = department;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
     @Override
     public String toString() {
         return "Employee{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + firstName + " " + lastName +
+                '\'' +
                 ", email='" + email + '\'' +
                 ", dob=" + dob +
                 ", age=" + age +
+                ", department=" + department +
+                ", user=" + user +
                 '}';
     }
 }

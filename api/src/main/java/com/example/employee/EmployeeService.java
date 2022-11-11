@@ -48,13 +48,18 @@ public class EmployeeService {
                         "Employee with ID" + employeeId + "does not exist"
                 ));
 
-        String name = updatedEmployee.getName();
+        String firstName = updatedEmployee.getFirstName();
+        String lastName = updatedEmployee.getLastName();
         String email = updatedEmployee.getEmail();
         LocalDate dob = updatedEmployee.getDob();
 
 
-        if (name != null && name.length() > 0 && !Objects.equals(employee.getName(), name)) {
-            employee.setName(name);
+        if (firstName != null && firstName.length() > 0 && !Objects.equals(employee.getFirstName(), firstName)) {
+            employee.setFirstName(firstName);
+        }
+
+        if (lastName != null && lastName.length() > 0 && !Objects.equals(employee.getLastName(), lastName)) {
+            employee.setLastName(lastName);
         }
 
         if (email != null && email.length() > 0 && !Objects.equals(employee.getEmail(), email)) {
