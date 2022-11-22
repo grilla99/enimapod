@@ -8,5 +8,4 @@ COPY web-content/ /usr/share/nginx/html
 # use this version locally, above for circleci
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 
-
 EXPOSE 80
