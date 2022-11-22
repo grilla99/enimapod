@@ -1,12 +1,11 @@
 // Handles the retrieval of users
 const fetchUsers = () => {
     axios
-      .get('http://3.8.154.47:8081/api/v1/employee')
+      .get('http://localhost:8081/api/v1/employee')
       .then(response => {
         const employees = response.data;
         const table = document.getElementById('table-row')
         generateTable(table, employees)
-
       })
       .catch(error => console.error(error))
   };
@@ -14,34 +13,27 @@ const fetchUsers = () => {
 const generateTable = (table, data) => {
   for (let element of data) {
     let row = table.insertRow();
-    
+
     for (key in element) {
-      let cell = row.insertCell();
-      let text = document.createTextNode(element[key])
-      cell.appendChild(text);
+      if (!key.includes("department")) {
+        let cell = row.insertCell();
+        let text = document.createTextNode(element[key])
+        cell.appendChild(text);
+      } else {
+        let departmentDetails = Object.values(element[key])
+        let cell = row.insertCell();
+        // Response = [ID, DeparmtentName, Location]
+        let departmentName = document.createTextNode(departmentDetails[1])
+        cell.append(departmentName)
+      }
     }
   }
 }
 
-
-
-
-// // Display Users
-// function displayEmployees(employees) {
-//   var mainContainer = document.getElementById("employee-list")
-//   employees.forEach(employee => {
-//     var div = document.createElement("div");
-//     div.innerHTML = `ID: ${employee.id}:${employee.name}, ${employee.email}, ${employee.dob}`
-//     div.classList.add('employee-list')
-//     mainContainer.appendChild(div);
-//   });
-// }
-
-
 //  Handle User Creation
 const createUser = user => {
   axios
-  .post('http://3.8.154.47:8081/api/v1/employee', user, {
+  .post('http://localhost:8081/api/v1/employee', user, {
     headers: headers
   }
   ) 
@@ -64,11 +56,41 @@ const registerEmpForm = document.getElementById('register-employee-form');
 const formEvent = registerEmpForm.addEventListener('submit', event => {
   event.preventDefault()
 
-  const name = document.querySelector('#reg-name').value
+  const firstName = document.querySelector('#reg-first_name').value
+  const lastName = document.querySelector('#reg-last_name').value
   const email = document.querySelector('#reg-email').value
   const dob = document.querySelector('#reg-dob').value
+  let department = document.querySelector('#reg-department').value
 
-  const user = {name, email, dob}
+  switch (department) {
+    case 'ecs':
+      department = {
+        name: "Finance",
+        location: "Bishopsgate"
+      }
+      break;
+    case 'marketing':
+      department = {
+        name: "Marketing",
+        location: "Deansgate"
+      }
+      break;
+    case 'finance':
+      department = {
+        name: "ECS",
+        location: "Farringdon"
+      }
+      break;
+  }
+
+  const user = {
+    firstName,
+    lastName,
+    email,
+    dob,
+    department
+  }
+
   createUser(user);
 })
 
@@ -87,7 +109,7 @@ const deleteEvent = deleteEmpForm.addEventListener('submit', event => {
 const deleteUser = id => {
   console.log(id)
   axios
-      .delete(`http://3.8.154.47:8081/api/v1/employee/${id}`, {
+      .delete(`http://localhost:8081/api/v1/employee/${id}`, {
         headers: headers
       })
       .catch(error => console.error(error))
@@ -121,7 +143,7 @@ const updateUser = id => {
   });
   
   axios
-    .put(`http://3.8.154.47:8081/api/v1/employee/${id}`, user, {
+    .put(`http://localhost:8081/api/v1/employee/${id}`, user, {
       headers: headers
     })
     .catch(error => console.error(error))

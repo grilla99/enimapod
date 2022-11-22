@@ -22,9 +22,12 @@
                 <table class="table table-striped" id="employee-table">
                     <thead>
                         <th scope="col">ID</th>
-                        <th scope="col">Name</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
                         <th scope="col">Email</th>
+                        <th scope="col">DoB</th>
                         <th scope="col">Age</th>
+                        <th scope="col">Department</th>
                     </thead>
                     <tbody id="table-row">
                     </tbody>
@@ -35,8 +38,12 @@
             <h1>Register an Employee</h1>
             <form id="register-employee-form">
                 <div class="form-group">
-                    <label for="reg-name" class="reg-label">Employee Name</label>
-                    <input type="text" id="reg-name" placeholder="Enter name">
+                    <label for="reg-first_name" class="reg-label">Employee Forename</label>
+                    <input type="text" id="reg-first_name" placeholder="Enter first name">
+                </div>
+                <div class="form-group">
+                    <label for="reg-last_name" class="reg-label">Employee Surname</label>
+                    <input type="text" id="reg-last_name" placeholder="Enter last name">
                 </div>
                 <div class="form-group">
                     <label for="reg-email" class="reg-label">Email address</label>
@@ -46,6 +53,14 @@
                 <label for="reg-dob" class="reg-label">Date of Birth</label>
                 <input type="text" id="reg-dob" placeholder="2000-01-01">
                </div>
+                <div class="form-group">
+                    <label for="reg-department" class="reg-label">Department</label>
+                    <select name="reg-department" id="reg-department">
+                        <option value="ecs">ECS</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="finance">Finance</option>
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-success">Add employee</button>
             </form>
         </div>
@@ -60,7 +75,8 @@
             <h1>Update Employee</h1>
             <form id="update-employee-form">
                 <input type="number" id="update-id" placeholder="Enter existing employee ID">
-                <input type="text" id="update-name" placeholder="Enter a new name">
+                <input type="text" id="update-first_name" placeholder="Enter a different first name">
+                <input type="text" id="update-last_name" placeholder="Enter a different last name">
                 <input type="text" id="update-email" placeholder="Enter an unused email address">
                 <input type="text" id="update-dob" placeholder="Enter a different date of birth">
                 <button type="submit" class="btn btn-edit">Submit</button>
