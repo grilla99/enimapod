@@ -2,9 +2,7 @@ package com.example.employee;
 
 import com.example.department.Department;
 import com.example.user.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,6 +11,10 @@ import java.time.Period;
 //Data Access Layer
 @Entity
 @Table
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class Employee {
 
     @Id
@@ -35,7 +37,6 @@ public class Employee {
 
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
-    @JsonManagedReference
     private Department department;
 
     @OneToOne
@@ -51,6 +52,7 @@ public class Employee {
         this.lastName = lastName;
         this.email = email;
         this.dob = dob;
+        this.age = getAge();
         this.department = department;
     }
 
@@ -59,6 +61,7 @@ public class Employee {
         this.lastName = lastName;
         this.email = email;
         this.dob = dob;
+        this.age = getAge();
         this.department = department;
         this.user = user;
     }

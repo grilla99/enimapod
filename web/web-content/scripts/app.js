@@ -56,11 +56,41 @@ const registerEmpForm = document.getElementById('register-employee-form');
 const formEvent = registerEmpForm.addEventListener('submit', event => {
   event.preventDefault()
 
-  const name = document.querySelector('#reg-name').value
+  const firstName = document.querySelector('#reg-first_name').value
+  const lastName = document.querySelector('#reg-last_name').value
   const email = document.querySelector('#reg-email').value
   const dob = document.querySelector('#reg-dob').value
+  let department = document.querySelector('#reg-department').value
 
-  const user = {name, email, dob}
+  switch (department) {
+    case 'ecs':
+      department = {
+        name: "Finance",
+        location: "Bishopsgate"
+      }
+      break;
+    case 'marketing':
+      department = {
+        name: "Marketing",
+        location: "Deansgate"
+      }
+      break;
+    case 'finance':
+      department = {
+        name: "ECS",
+        location: "Farringdon"
+      }
+      break;
+  }
+
+  const user = {
+    firstName,
+    lastName,
+    email,
+    dob,
+    department
+  }
+
   createUser(user);
 })
 

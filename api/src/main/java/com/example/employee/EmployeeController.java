@@ -15,7 +15,9 @@ public class EmployeeController {
 
     @CrossOrigin("*")
     @GetMapping
-    public List<Employee> getEmployees(){ return employeeService.getEmployees();}
+    public List<Employee> getEmployees(){
+        return employeeService.getEmployees();
+    }
 
     @CrossOrigin("*")
     @PostMapping

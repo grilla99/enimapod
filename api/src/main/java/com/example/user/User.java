@@ -2,7 +2,9 @@ package com.example.user;
 
 import com.example.employee.Employee;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.time.LocalDate;
 
@@ -10,6 +12,10 @@ import javax.persistence.*;
 
 @Entity
 @Table
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class User {
     @Id
     @SequenceGenerator(
@@ -26,7 +32,6 @@ public class User {
     @OneToOne(mappedBy = "user")
     @JsonManagedReference
     private Employee employee;
-
 
     public User() {
     }

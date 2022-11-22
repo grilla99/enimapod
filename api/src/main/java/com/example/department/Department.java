@@ -1,9 +1,7 @@
 package com.example.department;
 
 import com.example.employee.Employee;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -27,9 +25,9 @@ public class Department {
 
     private String location;
 
-    @OneToMany(mappedBy="department")
-    @JsonBackReference
-    private Set<Employee> employees;
+//    @OneToMany(mappedBy="department")
+//    @JsonBackReference
+//    private Set<Employee> employees;
 
     public Department(String name, String location) {
         this.name = name;
@@ -64,11 +62,11 @@ public class Department {
         this.location = location;
     }
 
-    public Set<Employee> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(Set<Employee> employees) {
-        this.employees = employees;
-    }
+//    public Set<Employee> getEmployees() {
+//        return employees;
+//    }
+//
+//    public void setEmployees(Set<Employee> employees) {
+//        this.employees = employees;
+//    }
 }
