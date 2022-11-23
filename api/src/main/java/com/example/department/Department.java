@@ -25,10 +25,6 @@ public class Department {
 
     private String location;
 
-//    @OneToMany(mappedBy="department")
-//    @JsonBackReference
-//    private Set<Employee> employees;
-
     public Department(String name, String location) {
         this.name = name;
         this.location = location;

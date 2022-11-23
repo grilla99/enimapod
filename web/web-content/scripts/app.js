@@ -62,7 +62,22 @@ const formEvent = registerEmpForm.addEventListener('submit', event => {
   const dob = document.querySelector('#reg-dob').value
   let department = document.querySelector('#reg-department').value
 
-  switch (department) {
+  department = createDepartmentObject(department)
+
+  const user = {
+    firstName,
+    lastName,
+    email,
+    dob,
+    department
+  }
+
+  createUser(user);
+})
+
+const createDepartmentObject = (departmentString) => {
+  departmentString = departmentString.toLowerCase()
+  switch (departmentString) {
     case 'ecs':
       department = {
         name: "Finance",
@@ -82,17 +97,8 @@ const formEvent = registerEmpForm.addEventListener('submit', event => {
       }
       break;
   }
-
-  const user = {
-    firstName,
-    lastName,
-    email,
-    dob,
-    department
-  }
-
-  createUser(user);
-})
+  return department
+}
 
 // Handle User Deletion
 const deleteEmpForm = document.getElementById('delete-employee-form');
@@ -107,7 +113,6 @@ const deleteEvent = deleteEmpForm.addEventListener('submit', event => {
 
 
 const deleteUser = id => {
-  console.log(id)
   axios
       .delete(`http://localhost:8081/api/v1/employee/${id}`, {
         headers: headers
@@ -138,10 +143,14 @@ const updateUser = id => {
   updateFields.forEach(field => {
     if (field.value) {
       key = (field.id).replace("update-", "")
-      user[key] = field.value
+      if (key == "department") {
+        user[key] = createDepartmentObject(field.value)
+      } else {
+        user[key] = field.value
+      }
     }
   });
-  
+
   axios
     .put(`http://localhost:8081/api/v1/employee/${id}`, user, {
       headers: headers

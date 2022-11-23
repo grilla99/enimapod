@@ -77,6 +77,8 @@ public class EmployeeService {
         employeeRepository.deleteById(employeeId);
     }
 
+    //ToDo:
+    // Extract to a factory method and replace all the if ...
     @Transactional
     public void updateEmployee(Long employeeId, Employee updatedEmployee) {
         Employee employee = employeeRepository.findById(employeeId)
@@ -88,7 +90,7 @@ public class EmployeeService {
         String lastName = updatedEmployee.getLastName();
         String email = updatedEmployee.getEmail();
         LocalDate dob = updatedEmployee.getDob();
-
+        Department department = updatedEmployee.getDepartment();
 
         if (firstName != null && firstName.length() > 0 && !Objects.equals(employee.getFirstName(), firstName)) {
             employee.setFirstName(firstName);
@@ -108,6 +110,11 @@ public class EmployeeService {
 
         if (dob != null && !Objects.equals(employee.getDob(), dob)) {
             employee.setDob(dob);
+        }
+
+        if (department != null) {
+            Department newDepartment = departmentRepository.findDepartmentByName(department.getName());
+            employee.setDepartment(newDepartment);
         }
     }
 }
