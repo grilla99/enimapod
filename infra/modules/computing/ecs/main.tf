@@ -57,27 +57,27 @@ resource "aws_ecs_task_definition" "task_definition" {
         }
       }
     }
-    #   ,
-    #  {
-    #    name = "server"
-    #    image = "342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest"
-    #    memory = 512
-    #    cpu = 512
-    #    essential = true
-    #    portMappings = [
-    #      {
-    #        containerPort = 80
-    #        hostPort = 80
-    #      }
-    #    ]
-    #    logConfiguration = {
-    #              logDriver : "awslogs",
-    #              options = {
-    #                awslogs-region = "eu-west-2",
-    #                awslogs-group  = "/ecs/service/web"
-    #              }
-    #            }
-    #  }
+#       ,
+#  x   {
+#        name = "server"
+#        image = "342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest"
+#        memory = 512
+#        cpu = 512
+#        essential = true
+#        portMappings = [
+#          {
+#            containerPort = 80
+#            hostPort = 80
+#          }
+#        ]
+#        logConfiguration = {
+#                  logDriver : "awslogs",
+#                  options = {
+#                    awslogs-region = "eu-west-2",
+#                    awslogs-group  = "/ecs/service/web"
+#                  }
+#                }
+#      }
   ])
 
   volume {

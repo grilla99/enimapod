@@ -1,7 +1,7 @@
 // Handles the retrieval of users
 const fetchUsers = () => {
     axios
-      .get('http://localhost:8081/api/v1/employee')
+      .get('http://18.134.246.32:8081/api/v1/employee')
       .then(response => {
         const employees = response.data;
         const table = document.getElementById('table-row')
@@ -33,7 +33,7 @@ const generateTable = (table, data) => {
 //  Handle User Creation
 const createUser = user => {
   axios
-  .post('http://localhost:8081/api/v1/employee', user, {
+  .post('http://18.134.246.32:8081/api/v1/employee', user, {
     headers: headers
   }
   ) 
@@ -78,7 +78,7 @@ const formEvent = registerEmpForm.addEventListener('submit', event => {
 const createDepartmentObject = (departmentString) => {
   departmentString = departmentString.toLowerCase()
   switch (departmentString) {
-    case 'ecs':
+    case 'finance':
       department = {
         name: "Finance",
         location: "Bishopsgate"
@@ -90,7 +90,7 @@ const createDepartmentObject = (departmentString) => {
         location: "Deansgate"
       }
       break;
-    case 'finance':
+    case 'ecs':
       department = {
         name: "ECS",
         location: "Farringdon"
@@ -114,7 +114,7 @@ const deleteEvent = deleteEmpForm.addEventListener('submit', event => {
 
 const deleteUser = id => {
   axios
-      .delete(`http://localhost:8081/api/v1/employee/${id}`, {
+      .delete(`http://18.134.246.32:8081/api/v1/employee/${id}`, {
         headers: headers
       })
       .catch(error => console.error(error))
@@ -152,7 +152,7 @@ const updateUser = id => {
   });
 
   axios
-    .put(`http://localhost:8081/api/v1/employee/${id}`, user, {
+    .put(`http://18.134.246.32:8081/api/v1/employee/${id}`, user, {
       headers: headers
     })
     .catch(error => console.error(error))

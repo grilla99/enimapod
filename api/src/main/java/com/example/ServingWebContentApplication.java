@@ -41,9 +41,9 @@ public class ServingWebContentApplication {
                     "Deansgate"
             );
 
-//            departmentRepository.saveAll(
-//                    List.of(finance, ecs, marketing)
-//            );
+            departmentRepository.saveAll(
+                    List.of(finance, ecs, marketing)
+            );
 
             User userAaron = new User(
                     "grilla99",
@@ -64,9 +64,9 @@ public class ServingWebContentApplication {
                     LocalDate.now()
             );
 
-//            userRepository.saveAll(
-//                    List.of(userAaron, userTim, userTom)
-//            );
+            userRepository.saveAll(
+                    List.of(userAaron, userTim, userTom)
+            );
 
             Employee aaron = new Employee(
                     "Aaron",
@@ -93,9 +93,9 @@ public class ServingWebContentApplication {
                     marketing,
                     userTom
             );
-//            employeeRepository.saveAll(
-//                    List.of(aaron, tim, tom)
-//            );
+            employeeRepository.saveAll(
+                    List.of(aaron, tim, tom)
+            );
         };
     }
 
