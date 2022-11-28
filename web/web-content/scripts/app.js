@@ -152,7 +152,7 @@ const updateUser = id => {
   });
 
   axios
-    .put(`http://18.134.246.32:8081/api/v1/employee/${id}`, user, {
+    .put(`http://localhost:8081/api/v1/employee/${id}`, user, {
       headers: headers
     })
     .catch(error => console.error(error))
