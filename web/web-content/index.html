@@ -14,76 +14,149 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-    <body>        
-        <div>
-            <h1>Employees</h1>
-            <button onclick="fetchUsers()" class="btn btn-primary">List Employees</button>
-            <div id="employee-list">
-                <table class="table table-striped" id="employee-table">
-                    <thead>
-                        <th scope="col">ID</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">DoB</th>
-                        <th scope="col">Age</th>
-                        <th scope="col">Department</th>
-                    </thead>
-                    <tbody id="table-row">
-                    </tbody>
-                </table>
+    <body>   
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Employee Management System</h1>
+                    <button onclick="fetchUsers()" class="btn btn-primary wide">List Employees</button>
+                    <div id="employee-list">
+                        <table class="table table-striped" id="employee-table">
+                            <thead>
+                                <th scope="col">ID</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">DoB</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Department</th>
+                            </thead>
+                            <tbody id="table-row">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div id="create-user">
-            <h1>Register an Employee</h1>
-            <form id="register-employee-form">
-                <div class="form-group">
-                    <label for="reg-first_name" class="reg-label">Employee Forename</label>
-                    <input type="text" id="reg-first_name" placeholder="Enter first name">
+
+            <div id="create-user" class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>Register an Employee</h1>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="reg-last_name" class="reg-label">Employee Surname</label>
-                    <input type="text" id="reg-last_name" placeholder="Enter last name">
+                    <form id="register-employee-form" class="form-border">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="reg-first_name" class="form-label">Employee Forename</label>
+                                    <input type="text" id="reg-first_name" class="text-light form-control" placeholder="Enter first name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="reg-last_name" class="form-label">Employee Surname</label>
+                                    <input type="text" id="reg-last_name" class="form-control" placeholder="Enter last name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="reg-email" class="form-label">Email address</label>
+                                    <input type="text" id="reg-email" class="form-control" placeholder="Enter email">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="reg-dob" class="form-label">Date of Birth</label>
+                                    <input type="text" id="reg-dob" class="form-control" placeholder="2000-01-01">
+                                   </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="reg-department" class="form-label">Department</label>
+                                    <select name="reg-department" class="form-control" id="reg-department">
+                                        <option value="ecs">ECS</option>
+                                        <option value="marketing">Marketing</option>
+                                        <option value="finance">Finance</option>
+                                    </select>
+                                </div>
+                            </div>     
+                        </div>
+                        <button type="submit" class="btn btn-success wide">Add employee</button>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label for="reg-email" class="reg-label">Email address</label>
-                    <input type="text" id="reg-email" placeholder="Enter email">
+                <div id="delete-user" class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1>Delete Employee</h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <form id="delete-employee-form"> 
+                            <div class="col-md-5">
+                                <label for="del-id" class="form-label">Enter Employee ID to delete</label>
+                                <input type="text" id="del-id" placeholder="E.G. 1">
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-danger delete-button">Delete employee</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-               <div class="form-group">
-                <label for="reg-dob" class="reg-label">Date of Birth</label>
-                <input type="text" id="reg-dob" placeholder="2000-01-01">
-               </div>
-                <div class="form-group">
-                    <label for="reg-department" class="reg-label">Department</label>
-                    <select name="reg-department" id="reg-department">
-                        <option value="ecs">ECS</option>
-                        <option value="marketing">Marketing</option>
-                        <option value="finance">Finance</option>
-                    </select>
+                <div id="update-user container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1>Update Employee</h1>
+                        </div>
+                    </div>
+                    <form id="update-employee-form">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="update-id" class="form-label">Employee ID</label>
+                                <input type="number" id="update-id" class="form-control" placeholder="Enter existing employee ID">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="update-firstName" class="form-label">First Name</label>
+                                <input type="text" id="update-firstName" class="form-control" placeholder="Enter a different first name">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="update-lastName" class="form-label">Last Name</label>
+                                <input type="text" id="update-lastName" class="form-control" placeholder="Enter a different last name">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="update-email" class="form-label">Email</label>
+                                <input type="text" id="update-email" class="form-control" placeholder="Enter an unused email address">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="update-dob" class="form-label">Date of Birth</label>
+                                <input type="text" id="update-dob" class="form-control" placeholder="Enter a different date of birth">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="update-department" class="form-label">Department</label>
+                                <input type="text" id="update-department" class="form-control" placeholder="ECS / Marketing / Finance">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-edit wide">Update</button>
+                            </div>
+                        </div>                        
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-success">Add employee</button>
-            </form>
-        </div>
-        <div id="delete-user">
-            <h1>Delete Employee</h1>
-            <form id="delete-employee-form"> 
-                <input type="text" id="del-id" placeholder="Enter employee ID">
-                <button type="submit" class="btn btn-danger">Delete employee</button>
-            </form>
-        </div>
-        <div id="update-user">
-            <h1>Update Employee</h1>
-            <form id="update-employee-form">
-                <input type="number" id="update-id" placeholder="Enter existing employee ID">
-                <input type="text" id="update-firstName" placeholder="Enter a different first name">
-                <input type="text" id="update-lastName" placeholder="Enter a different last name">
-                <input type="text" id="update-email" placeholder="Enter an unused email address">
-                <input type="text" id="update-dob" placeholder="Enter a different date of birth">
-                <input type="text" id="update-department" placeholder="ECS / Marketing / Finance">
-                <button type="submit" class="btn btn-edit">Submit</button>
-            </form>
-        </div>
+            </div>
+            
+           
+        </div>     
     </body>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1263.0.min.js"></script>
+    <script src="scripts/require.js"></script>
     <script src="scripts/app.js"></script>
 </html>
