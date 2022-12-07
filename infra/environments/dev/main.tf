@@ -43,8 +43,8 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_subnet" "public_two" {
-  vpc_id = aws_vpc.main.id
-  cidr_block = "10.0.2.0/24"
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.2.0/24"
   availability_zone = "eu-west-2b"
 }
 
@@ -125,13 +125,42 @@ module "rds" {
 }
 
 module "ecs" {
-  source     = "../../modules/computing/ecs"
-  api_sg_id  = aws_security_group.api_task.id
-  ecs_sub_id = aws_subnet.public.id
+  source         = "../../modules/computing/ecs"
+  api_sg_id      = aws_security_group.api_task.id
+  ecs_sub_id     = aws_subnet.public.id
   ecs_sub_two_id = aws_subnet.public_two.id
-  vpc_id = aws_vpc.main.id
+  vpc_id         = aws_vpc.main.id
 }
 
+data "aws_route53_zone" "enimapod" {
+  name = "enimapod.co.uk."
+}
+
+resource "aws_route53_record" "alias_route53_record" {
+  zone_id = data.aws_route53_zone.enimapod.zone_id
+  name    = "enimapod.co.uk"
+  type    = "A"
+
+
+  alias {
+    name                   = "dualstack.${module.ecs.lb_dns_name}"
+    zone_id                = module.ecs.lb_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "aaaa_route53_record" {
+  zone_id = data.aws_route53_zone.enimapod.zone_id
+  name    = "enimapod.co.uk"
+  type    = "AAAA"
+
+
+  alias {
+    name                   = "dualstack.${module.ecs.lb_dns_name}"
+    zone_id                = module.ecs.lb_zone_id
+    evaluate_target_health = false
+  }
+}
 
 
 

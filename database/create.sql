@@ -1,3 +1,5 @@
+CREATE DATABASE gft;
+use gft;
 create table department (id bigint not null, location varchar(255), name varchar(255), primary key (id)) engine=InnoDB;
 create table department_sequence (next_val bigint) engine=InnoDB;
 insert into department_sequence values ( 1 );

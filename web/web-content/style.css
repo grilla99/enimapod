@@ -10,6 +10,11 @@ body{
 
 h1 {
     color: white !important;
+    text-align: center;
+}
+
+h2 {
+    color: white !important;
 }
 
 .employee-list {
@@ -21,9 +26,14 @@ h1 {
 }
 
 .label  {
+<<<<<<< HEAD
+    color: white !important;
+    font-size: 1.5rem;
+=======
     color: white;
     
     /* font-size: 1.6rem; */
+>>>>>>> 95a5368067b70844d9775885e793321ec5507c8b
 }
 
 .wide {
@@ -34,10 +44,13 @@ h1 {
     width: 50%;
     margin-right: 80%;
     padding-left: 0;
+<<<<<<< HEAD
+=======
 }
 
 .form-border {
     border: 1;
     border-style: solid;
     border-color: navy;
+>>>>>>> 95a5368067b70844d9775885e793321ec5507c8b
 }

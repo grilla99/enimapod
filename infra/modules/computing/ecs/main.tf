@@ -208,5 +208,12 @@ resource "aws_cloudwatch_log_group" "web_logs" {
   name = "/ecs/service/web"
 }
 
+output "lb_dns_name" {
+  value = "${aws_alb.ecs_alb.dns_name}"
+}
+
+output "lb_zone_id" {
+  value = "${aws_alb.ecs_alb.zone_id}"
+}
 
 
