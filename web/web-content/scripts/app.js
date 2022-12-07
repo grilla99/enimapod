@@ -1,7 +1,11 @@
 // Handles the retrieval of users
 const fetchUsers = () => {
     axios
+<<<<<<< HEAD
       .get('http://enimapod.co.uk:8081/api/v1/employee')
+=======
+      .get('http://3.8.5.71:8081/api/v1/employee')
+>>>>>>> 95a5368067b70844d9775885e793321ec5507c8b
       .then(response => {
         const employees = response.data;
         const table = document.getElementById('table-row')
@@ -36,7 +40,11 @@ const generateTable = (table, data) => {
 //  Handle User Creation
 const createUser = user => {
   axios
+<<<<<<< HEAD
   .post('http://enimapod.co.uk:8081/api/v1/employee', user, {
+=======
+  .post('http://35.176.124.139:8081/api/v1/employee', user, {
+>>>>>>> 95a5368067b70844d9775885e793321ec5507c8b
     headers: headers
   }
   ) 
@@ -117,7 +125,11 @@ const deleteEvent = deleteEmpForm.addEventListener('submit', event => {
 
 const deleteUser = id => {
   axios
+<<<<<<< HEAD
       .delete(`http://enimapod.co.uk:8081/api/v1/employee/${id}`, {
+=======
+      .delete(`http://35.176.124.139:8081/api/v1/employee/${id}`, {
+>>>>>>> 95a5368067b70844d9775885e793321ec5507c8b
         headers: headers
       })
       .catch(error => console.error(error))
@@ -155,7 +167,11 @@ const updateUser = id => {
   });
 
   axios
+<<<<<<< HEAD
     .put(`http://enimapod.co.uk:8081/api/v1/employee/${id}`, user, {
+=======
+    .put(`http://35.176.124.139:8081/api/v1/employee/${id}`, user, {
+>>>>>>> 95a5368067b70844d9775885e793321ec5507c8b
       headers: headers
     })
     .catch(error => console.error(error))
