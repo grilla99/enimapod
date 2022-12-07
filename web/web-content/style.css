@@ -20,6 +20,24 @@ h1 {
     background-color: white;
 }
 
-.reg-label  {
+.label  {
     color: white;
+    
+    /* font-size: 1.6rem; */
+}
+
+.wide {
+    width: 100%;
+}
+
+.delete-button {
+    width: 50%;
+    margin-right: 80%;
+    padding-left: 0;
+}
+
+.form-border {
+    border: 1;
+    border-style: solid;
+    border-color: navy;
 }

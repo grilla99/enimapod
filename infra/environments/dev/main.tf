@@ -42,6 +42,12 @@ resource "aws_subnet" "public" {
   availability_zone = "eu-west-2a"
 }
 
+resource "aws_subnet" "public_two" {
+  vpc_id = aws_vpc.main.id
+  cidr_block = "10.0.2.0/24"
+  availability_zone = "eu-west-2b"
+}
+
 resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.1.0/24"
@@ -122,6 +128,8 @@ module "ecs" {
   source     = "../../modules/computing/ecs"
   api_sg_id  = aws_security_group.api_task.id
   ecs_sub_id = aws_subnet.public.id
+  ecs_sub_two_id = aws_subnet.public_two.id
+  vpc_id = aws_vpc.main.id
 }
 
 
