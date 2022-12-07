@@ -132,6 +132,35 @@ module "ecs" {
   vpc_id = aws_vpc.main.id
 }
 
+data "aws_route53_zone" "enimapod" {
+  name = "enimapod.co.uk."
+}
+
+resource "aws_route53_record" "alias_route53_record" {
+  zone_id = data.aws_route53_zone.enimapod.zone_id
+  name = "enimapod.co.uk"
+  type = "A"
+  
+
+  alias {
+    name = "dualstack.${module.ecs.lb_dns_name}"
+    zone_id = module.ecs.lb_zone_id
+    evaluate_target_health = false 
+  }
+} 
+
+resource "aws_route53_record" "aaaa_route53_record" {
+  zone_id = data.aws_route53_zone.enimapod.zone_id
+  name = "enimapod.co.uk"
+  type = "AAAA"
+  
+
+  alias {
+    name = "dualstack.${module.ecs.lb_dns_name}"
+    zone_id = module.ecs.lb_zone_id
+    evaluate_target_health = false 
+  }
+} 
 
 
 

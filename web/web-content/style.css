@@ -10,6 +10,11 @@ body{
 
 h1 {
     color: white !important;
+    text-align: center;
+}
+
+h2 {
+    color: white !important;
 }
 
 .employee-list {
@@ -21,9 +26,8 @@ h1 {
 }
 
 .label  {
-    color: white;
-    
-    /* font-size: 1.6rem; */
+    color: white !important;
+    font-size: 1.5rem;
 }
 
 .wide {
@@ -34,10 +38,4 @@ h1 {
     width: 50%;
     margin-right: 80%;
     padding-left: 0;
-}
-
-.form-border {
-    border: 1;
-    border-style: solid;
-    border-color: navy;
 }
