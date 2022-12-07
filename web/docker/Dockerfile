@@ -11,7 +11,7 @@ COPY web/web-content/ /usr/share/nginx/html
 COPY web/package.json /usr/share/nginx/html/package.json
 COPY web/package-lock.json /usr/share/nginx/html/package-lock.json
 
-COPY docker/bash-scripts/initial-load.sh /usr/initial-load.sh
+COPY web/docker/bash-scripts/initial-load.sh /usr/initial-load.sh
 
 RUN /usr/initial-load.sh
 
