@@ -10,14 +10,6 @@ resource "aws_security_group" "rds" {
     to_port         = 3306
     security_groups = [var.ecs_sg_id]
   }
-
-  egress {
-    description = "Allow all outbound traffic"
-    protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 }
 
 resource "aws_subnet" "rds_sub_one" {
@@ -30,16 +22,6 @@ resource "aws_subnet" "rds_sub_two" {
   vpc_id            = var.vpc_id
   cidr_block        = "10.0.4.0/24"
   availability_zone = "eu-west-2c"
-}
-
-resource "aws_route_table_association" "rta" {
-  subnet_id      = aws_subnet.rds_sub_one.id
-  route_table_id = var.pub_rt_id
-}
-
-resource "aws_route_table_association" "rta_sub_two" {
-  subnet_id      = aws_subnet.rds_sub_two.id
-  route_table_id = var.pub_rt_id
 }
 
 

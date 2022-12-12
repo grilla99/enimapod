@@ -99,6 +99,7 @@ module "ecs" {
   source              = "../../modules/computing/ecs"
   vpc_id              = local.aws_vpc_id
   vpc_zone_identifier = local.aws_pub_ids
+  alb_sg_id           = module.alb.alb_sg_id
 
   lb_tg_arn     = local.lb_tg_arn
   lb_tg_api_arn = local.lb_tg_api_arn

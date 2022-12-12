@@ -21,6 +21,11 @@ variable "ecs_instance_type" {
   description = "value"
 }
 
+variable "alb_sg_id" {
+  type        = string
+  description = "value"
+}
+
 variable "ecs_user_data" {
   type        = string
   default     = <<EOF

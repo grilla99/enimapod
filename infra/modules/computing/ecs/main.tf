@@ -7,7 +7,7 @@ resource "aws_security_group" "api_task" {
     protocol    = "tcp"
     from_port   = 8081
     to_port     = 8081
-    cidr_blocks = ["0.0.0.0/0"]
+    security_groups = [var.alb_sg_id]
   }
 
   ingress {
@@ -15,7 +15,7 @@ resource "aws_security_group" "api_task" {
     protocol    = "tcp"
     from_port   = 80
     to_port     = 80
-    cidr_blocks = ["0.0.0.0/0"]
+    security_groups = [var.alb_sg_id]
   }
 
   ingress {
@@ -23,15 +23,7 @@ resource "aws_security_group" "api_task" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "Inbound SSH traffic"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    security_groups = [var.alb_sg_id]
   }
 
   egress {
@@ -45,6 +37,7 @@ resource "aws_security_group" "api_task" {
 resource "aws_ecs_cluster" "cluster" {
   name = var.cluster_name
 }
+
 
 resource "aws_launch_configuration" "ecs_launch_config" {
   image_id                    = var.ecs_image_id

@@ -119,3 +119,7 @@ output "lb_dns_name" {
 output "lb_zone_id" {
   value = aws_alb.ecs_alb[0].zone_id
 }
+
+output "alb_sg_id" {
+  value = aws_security_group.lb_sg[0].id
+}
