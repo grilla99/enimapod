@@ -1,70 +1,14 @@
-resource "aws_lb_target_group" "tg" {
-  name = "ecs-tg"
-  port = 80
-  protocol = "HTTP"
+resource "aws_security_group" "api_task" {
+  name   = "api-task-security-group"
   vpc_id = var.vpc_id
-  target_type = "instance"
-} 
 
-resource "aws_lb_target_group" "tg_api" {
-  name = "ecs-tg-api"
-  port = 8081
-  protocol = "HTTP"
-  vpc_id = var.vpc_id
-  target_type = "instance"
-}
-
-resource "aws_lb_listener" "listener" {
-  load_balancer_arn = aws_alb.ecs_alb.arn
-  port = "80"
-  protocol = "HTTP"
-
-  default_action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.tg.arn
+  ingress {
+    description = "Inbound traffic to the API port"
+    protocol    = "tcp"
+    from_port   = 8081
+    to_port     = 8081
+    cidr_blocks = ["0.0.0.0/0"]
   }
-}
-
-resource "aws_lb_listener" "api_listener" {
-  load_balancer_arn = aws_alb.ecs_alb.arn
-  port = 8081
-  protocol = "HTTP"
-
-  default_action {
-   type = "forward"
-   target_group_arn = aws_lb_target_group.tg_api.arn 
-  }
-}
-
-resource "aws_lb_listener_rule" "api_listener_employees" {
-  listener_arn = aws_lb_listener.api_listener.arn
-  
-  action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.tg_api.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/api/v1/employee"]
-    }
-  }
-}
-
-resource "aws_alb" "ecs_alb" {
-  name = "ecs-alb"
-  load_balancer_type = "application"
-  internal = false
-  security_groups = [aws_security_group.alb_sg.id]
-  ip_address_type = "ipv4"
-  subnets = [var.ecs_sub_id, var.ecs_sub_two_id]
-
-  
-}
-
-resource "aws_security_group" "alb_sg" {
-  name = "alb_sg"
-  vpc_id = var.vpc_id
 
   ingress {
     description = "Inbound traffic to the Web Server Port"
@@ -75,10 +19,18 @@ resource "aws_security_group" "alb_sg" {
   }
 
   ingress {
-    description = "Inbound traffic to the API Server Port"
+    description = "HTTPs traffic"
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
-    from_port   = 8081
-    to_port     = 8081
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Inbound SSH traffic"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -90,46 +42,41 @@ resource "aws_security_group" "alb_sg" {
   }
 }
 
-resource "aws_ecs_cluster" "ecs_fargate" {
-  name = "my-cluster"
+resource "aws_ecs_cluster" "cluster" {
+  name = var.cluster_name
 }
 
 resource "aws_launch_configuration" "ecs_launch_config" {
-  image_id                    = "ami-0fd6a5614931e9e58"
+  image_id                    = var.ecs_image_id
   iam_instance_profile        = aws_iam_instance_profile.ecs_agent.name
-  instance_type               = "t3.small"
-  user_data                   = <<EOF
-#!/bin/bash
-# The cluster this agent should tck into.
-echo 'ECS_CLUSTER=my-cluster' >> /etc/ecs/ecs.config
-# Disable privileged containers.
-echo 'ECS_DISABLE_PRIVILEGED=true' >> /etc/ecs/ecs.config
-EOF
-  associate_public_ip_address = true
+  instance_type               = var.ecs_instance_type
+  associate_public_ip_address = var.ecs_associate_public_ip
 
-  key_name = "MSKKeyPair"
+  key_name = var.ecs_key_pair_name
 
-  security_groups = [var.api_sg_id]
+  user_data = var.ecs_user_data
+
+  security_groups = [aws_security_group.api_task.id]
 }
 
 resource "aws_autoscaling_group" "ecs_cluster" {
-  name_prefix          = "asg"
-  vpc_zone_identifier  = [var.ecs_sub_id]
+  name_prefix          = var.asg_name_prefix
+  vpc_zone_identifier  = var.vpc_zone_identifier
   launch_configuration = aws_launch_configuration.ecs_launch_config.name
 
-  desired_capacity          = 2
-  min_size                  = 1
-  max_size                  = 3
-  health_check_grace_period = 300
-  health_check_type         = "EC2"
+  desired_capacity          = var.asg_desired_capacity
+  min_size                  = var.asg_min_capacity
+  max_size                  = var.asg_max_capacity
+  health_check_grace_period = var.asg_health_check_grace_period
+  health_check_type         = var.asg_health_check_type
 
-  target_group_arns = [aws_lb_target_group.tg.arn, aws_lb_target_group.tg_api.arn]
+  target_group_arns = [var.lb_tg_arn, var.lb_tg_api_arn]
 }
 
 resource "aws_ecs_task_definition" "task_definition" {
-  family = "service"
-  task_role_arn = "arn:aws:iam::342715877717:role/ecsTaskExecutionRole"
-  execution_role_arn = "arn:aws:iam::342715877717:role/ecsTaskExecutionRole"
+  family             = var.task_family
+  task_role_arn      = var.task_role_arn
+  execution_role_arn = var.execution_role_arn
   container_definitions = jsonencode([
     {
       name      = "api"
@@ -151,52 +98,52 @@ resource "aws_ecs_task_definition" "task_definition" {
         }
       }
     }
-       ,
-     {
-        name = "server"
-        image = "342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest"
-        memory = 512
-        cpu = 512
-        essential = true
-        portMappings = [
-          {
-            containerPort = 80
-            hostPort = 80
-          }
-        ]
-        logConfiguration = {
-                  logDriver : "awslogs",
-                  options = {
-                    awslogs-region = "eu-west-2",
-                    awslogs-group  = "/ecs/service/web"
-                  }
-                }
+    ,
+    {
+      name      = "server"
+      image     = "342715877717.dkr.ecr.eu-west-2.amazonaws.com/enimapod-web-server-repository:latest"
+      memory    = 512
+      cpu       = 512
+      essential = true
+      portMappings = [
+        {
+          containerPort = 80
+          hostPort      = 80
+        }
+      ]
+      logConfiguration = {
+        logDriver : "awslogs",
+        options = {
+          awslogs-region = "eu-west-2",
+          awslogs-group  = "/ecs/service/web"
+        }
       }
+    }
   ])
 
   volume {
-    name      = "service-storage"
-    host_path = "/ecs/service-storage"
+    name      = var.volume_name
+    host_path = var.volume_host_path
   }
 }
 
 
 resource "aws_ecs_service" "worker" {
-  name            = "service"
-  cluster         = aws_ecs_cluster.ecs_fargate.id
+  name            = var.service_name
+  cluster         = aws_ecs_cluster.cluster.id
   task_definition = aws_ecs_task_definition.task_definition.arn
-  desired_count   = 1
+  desired_count   = var.desired_count
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.tg.arn
-    container_name = "server"
-    container_port = 80
+    target_group_arn = var.lb_tg_arn
+    container_name   = "server"
+    container_port   = 80
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.tg_api.arn
-    container_name = "api"
-    container_port = 8081
+    target_group_arn = var.lb_tg_api_arn
+    container_name   = "api"
+    container_port   = 8081
   }
 }
 
@@ -208,12 +155,7 @@ resource "aws_cloudwatch_log_group" "web_logs" {
   name = "/ecs/service/web"
 }
 
-output "lb_dns_name" {
-  value = "${aws_alb.ecs_alb.dns_name}"
+output "ecs_sg_id" {
+  value = aws_security_group.api_task.id
 }
-
-output "lb_zone_id" {
-  value = "${aws_alb.ecs_alb.zone_id}"
-}
-
 

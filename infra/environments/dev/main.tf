@@ -12,7 +12,6 @@ terraform {
 
   backend "s3" {
     bucket = "enimapod-state"
-    # name of folder - state. e.g. dev-state
     key    = "dev-state"
     region = "eu-west-2"
   }
@@ -31,105 +30,85 @@ provider "docker" {
 }
 
 resource "aws_vpc" "main" {
-  cidr_block           = "10.0.0.0/16"
-  enable_dns_hostnames = true
-  enable_dns_support   = true
+  cidr_block           = var.main_vpc_cidr_block
+  enable_dns_hostnames = var.enable_dns_hostnames
+  enable_dns_support   = var.enable_dns_support
 }
 
-resource "aws_subnet" "public" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.0.0/24"
-  availability_zone = "eu-west-2a"
+resource "aws_subnet" "pub_subnets" {
+  for_each = var.public_subnets
+
+  availability_zone = each.value["availability_zone"]
+  cidr_block        = each.value["cidr_block"]
+  vpc_id            = local.aws_vpc_id
+
+  tags = {
+    "Name" = "${each.key}"
+  }
 }
 
-resource "aws_subnet" "public_two" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.2.0/24"
-  availability_zone = "eu-west-2b"
-}
+resource "aws_subnet" "priv_subnets" {
+  for_each = var.private_subnets
 
-resource "aws_subnet" "private" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.1.0/24"
-  availability_zone = "eu-west-2a"
+  availability_zone = each.value["availability_zone"]
+  cidr_block        = each.value["cidr_block"]
+  vpc_id            = local.aws_vpc_id
+
+  tags = {
+    "Name" = "${each.key}"
+  }
 }
 
 resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.main.id
+  count  = var.internet_gateway_addition ? 1 : 0
+  vpc_id = local.aws_vpc_id
 }
 
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main.id
+  count  = var.route_table_addition ? 1 : 0
+  vpc_id = local.aws_vpc_id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.gw.id
+    gateway_id = local.aws_ig_id
   }
 }
 
 resource "aws_route_table_association" "rta" {
-  subnet_id      = aws_subnet.public.id
-  route_table_id = aws_route_table.public.id
+  for_each = aws_subnet.pub_subnets
+
+  subnet_id      = each.value.id
+  route_table_id = local.aws_rt_id
+
+  depends_on = [
+    aws_route_table.public
+  ]
 }
 
-resource "aws_security_group" "api_task" {
-  name   = "api-task-security-group"
-  vpc_id = aws_vpc.main.id
-
-  ingress {
-    description = "Inbound traffic to the API port"
-    protocol    = "tcp"
-    from_port   = 8081
-    to_port     = 8081
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "Inbound traffic to the Web Server Port"
-    protocol    = "tcp"
-    from_port   = 80
-    to_port     = 80
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "HTTPs traffic"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "Inbound SSH traffic"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-
-module "rds" {
-  source    = "../../modules/data/rds"
-  vpc_id    = aws_vpc.main.id
-  ecs_sg_id = aws_security_group.api_task.id
-  pub_rt_id = aws_route_table.public.id
+module "alb" {
+  source             = "../../modules/networking/alb"
+  vpc_id             = local.aws_vpc_id
+  load_balancer_type = var.load_balancer_type
+  internal           = var.internal
+  ip_address_type    = var.lb_ip_address_type
+  subnet_ids         = local.aws_pub_ids
+  target_groups      = var.lb_target_groups
 }
 
 module "ecs" {
-  source         = "../../modules/computing/ecs"
-  api_sg_id      = aws_security_group.api_task.id
-  ecs_sub_id     = aws_subnet.public.id
-  ecs_sub_two_id = aws_subnet.public_two.id
-  vpc_id         = aws_vpc.main.id
+  source              = "../../modules/computing/ecs"
+  vpc_id              = local.aws_vpc_id
+  vpc_zone_identifier = local.aws_pub_ids
+
+  lb_tg_arn     = local.lb_tg_arn
+  lb_tg_api_arn = local.lb_tg_api_arn
+}
+
+module "rds" {
+  source    = "../../modules/data/rds"
+  vpc_id    = local.aws_vpc_id
+  ecs_sg_id = module.ecs.ecs_sg_id
+  pub_rt_id = aws_route_table.public[0].id
 }
 
 data "aws_route53_zone" "enimapod" {
@@ -143,8 +122,8 @@ resource "aws_route53_record" "alias_route53_record" {
 
 
   alias {
-    name                   = "dualstack.${module.ecs.lb_dns_name}"
-    zone_id                = module.ecs.lb_zone_id
+    name                   = "dualstack.${module.alb.lb_dns_name}"
+    zone_id                = module.alb.lb_zone_id
     evaluate_target_health = false
   }
 }
@@ -156,8 +135,8 @@ resource "aws_route53_record" "aaaa_route53_record" {
 
 
   alias {
-    name                   = "dualstack.${module.ecs.lb_dns_name}"
-    zone_id                = module.ecs.lb_zone_id
+    name                   = "dualstack.${module.alb.lb_dns_name}"
+    zone_id                = module.alb.lb_zone_id
     evaluate_target_health = false
   }
 }

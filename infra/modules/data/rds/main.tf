@@ -4,14 +4,6 @@ resource "aws_security_group" "rds" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "MySQL connection from my IP"
-    from_port   = 3306
-    protocol    = "tcp"
-    to_port     = 3306
-    cidr_blocks = ["${chomp(data.http.icanhazip.body)}/32"]
-  }
-
-  ingress {
     description     = "MySQL connection from instances belonging to the ECS cluster"
     from_port       = 3306
     protocol        = "tcp"
@@ -46,7 +38,7 @@ resource "aws_route_table_association" "rta" {
 }
 
 resource "aws_route_table_association" "rta_sub_two" {
-  subnet_id = aws_subnet.rds_sub_two.id
+  subnet_id      = aws_subnet.rds_sub_two.id
   route_table_id = var.pub_rt_id
 }
 
