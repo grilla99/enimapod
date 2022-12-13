@@ -1,4 +1,5 @@
 # enimapod
 
 # Phase 1 Diagram
-![Diagram](https://user-images.githubusercontent.com/51611300/189498817-cac3afac-4a49-4315-9c17-ca25ed1b9c86.png)
+
+![Screenshot 2022-12-13 at 14 30 27](https://user-images.githubusercontent.com/32545226/207360434-d8c30166-fee5-44c2-b3e1-43bfd2619b22.png)
