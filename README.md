@@ -25,7 +25,7 @@ on merging to master.
 - Refined these tickets as we discovered more about the architecture and requirements
 - Documenting development steps and build processes using a Confluence page for smoother testing
 and picking up others work as and where was necessary.
-- Reviewing architecture diagram and tickets at each sprint and refining these as necessary.
+- Reviewing architecture diagram and tickets at each sprint and refinwing these as necessary.
 
 ## Learning Takeaways
 During the build of this project we've had the chance to try out many new technologies that we'd never
